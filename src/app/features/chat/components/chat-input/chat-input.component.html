@@ -1,0 +1,32 @@
+<div class="flex items-end gap-3">
+  <div class="flex-1 relative">
+    <textarea
+      #textarea
+      [ngModel]="text()"
+      (ngModelChange)="text.set($event); autoResize()"
+      (keydown)="onKeydown($event)"
+      [disabled]="disabled()"
+      placeholder="Write your message... (Enter to send, Shift+Enter for new line)"
+      rows="1"
+      class="w-full bg-hp-surface border border-hp-border hover:border-hp-border/80 focus:border-hp-gold/60 focus:ring-1 focus:ring-hp-gold/30
+             rounded-xl px-4 py-3 text-sm text-gray-100 placeholder-hp-muted resize-none
+             transition-all duration-200 outline-none leading-relaxed
+             disabled:opacity-50 disabled:cursor-not-allowed"
+      style="max-height: 160px;"
+    ></textarea>
+  </div>
+
+  <button
+    (click)="submit()"
+    [disabled]="disabled() || !text().trim()"
+    class="flex-shrink-0 w-11 h-11 rounded-xl bg-hp-gold hover:bg-hp-gold-light
+           flex items-center justify-center text-hp-dark
+           transition-all duration-200 active:scale-95
+           disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-hp-gold"
+    title="Send (Enter)"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 -rotate-45 translate-x-0.5 -translate-y-0.5">
+      <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />
+    </svg>
+  </button>
+</div>

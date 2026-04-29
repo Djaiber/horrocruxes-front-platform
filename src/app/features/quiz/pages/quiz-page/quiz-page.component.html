@@ -1,0 +1,26 @@
+<div class="min-h-screen bg-hp-dark">
+
+  <app-loading-overlay [visible]="loading()" message="Consulting the Sorting Hat..." />
+
+  <!-- Header -->
+  <div class="sticky top-0 z-10 bg-hp-dark/80 backdrop-blur-sm border-b border-hp-border px-6 py-3 flex items-center gap-4">
+    <a routerLink="/chat" class="text-hp-muted hover:text-hp-gold transition-colors text-sm flex items-center gap-1.5">
+      <span>←</span> Back to chat
+    </a>
+    <div class="flex items-center gap-2 ml-auto">
+      <lucide-icon name="wand-sparkles" class="w-5 h-5 text-hp-gold"></lucide-icon>
+      <span class="font-heading text-hp-gold text-sm tracking-wider">Character Test</span>
+    </div>
+  </div>
+
+  <div class="max-w-2xl mx-auto px-4 py-8">
+    @if (showForm()) {
+      <app-quiz-form (submitted)="onSubmit($event)" />
+    } @else {
+      @if (result(); as r) {
+        <app-quiz-result [result]="r" (retake)="retake()" />
+      }
+    }
+  </div>
+
+</div>

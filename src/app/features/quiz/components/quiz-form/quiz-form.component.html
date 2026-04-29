@@ -1,0 +1,234 @@
+<div class="animate-fade-in">
+
+  <!-- Title -->
+  <div class="text-center mb-8">
+    <div class="w-12 h-12 mx-auto mb-3 text-hp-gold">
+      <lucide-icon name="wand-sparkles" class="w-12 h-12"></lucide-icon>
+    </div>
+    <h1 class="font-heading text-hp-gold text-2xl tracking-wider mb-2">Which character are you?</h1>
+    <p class="text-hp-muted text-sm">Answer honestly — the Sorting Hat will know</p>
+  </div>
+
+  <!-- Stepper -->
+  <div class="flex items-center mb-8">
+    @for (step of steps; track $index) {
+      <div class="flex items-center" [class.flex-1]="$index < steps.length - 1">
+        <div
+          class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold font-heading transition-all duration-300 flex-shrink-0"
+          [class.bg-hp-gold]="currentStep() >= $index + 1"
+          [class.text-hp-dark]="currentStep() >= $index + 1"
+          [class.bg-hp-border]="currentStep() < $index + 1"
+          [class.text-hp-muted]="currentStep() < $index + 1"
+        >
+          @if (currentStep() > $index + 1) {
+            <lucide-icon name="check" class="w-4 h-4"></lucide-icon>
+          } @else {
+            {{ $index + 1 }}
+          }
+        </div>
+        <span
+          class="text-xs ml-2 hidden sm:block transition-colors duration-300"
+          [class.text-hp-gold]="currentStep() === $index + 1"
+          [class.text-gray-400]="currentStep() > $index + 1"
+          [class.text-hp-muted]="currentStep() < $index + 1"
+        >{{ stepLabels[$index] }}</span>
+        @if ($index < steps.length - 1) {
+          <div
+            class="flex-1 h-px mx-3 transition-colors duration-300"
+            [class.bg-hp-gold]="currentStep() > $index + 1"
+            [class.bg-hp-border]="currentStep() <= $index + 1"
+          ></div>
+        }
+      </div>
+    }
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <!-- ══ STEP 1 ══ -->
+    @if (currentStep() === 1) {
+      <div class="space-y-6 animate-slide-up">
+
+        <div>
+          <p class="text-gray-200 font-medium mb-3">1. How do you react to unexpected danger?</p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            @for (opt of options.reaccion_peligro; track opt.value) {
+              <label [class]="radioOptionClass(form.value.reaccion_peligro, opt.value)">
+                <input type="radio" formControlName="reaccion_peligro" [value]="opt.value" class="hidden" />
+                <div [class]="radioDotClass(form.value.reaccion_peligro, opt.value)"></div>
+                <span class="text-sm text-gray-300">{{ opt.label }}</span>
+              </label>
+            }
+          </div>
+          @if (isFieldInvalid('reaccion_peligro')) {
+            <p class="error-msg mt-2">Select an option.</p>
+          }
+        </div>
+
+        <div>
+          <p class="text-gray-200 font-medium mb-3">2. What is your most important value?</p>
+          <div class="grid grid-cols-2 gap-2">
+            @for (opt of options.valor_principal; track opt.value) {
+              <label [class]="pillOptionClass(form.value.valor_principal, opt.value)">
+                <input type="radio" formControlName="valor_principal" [value]="opt.value" class="hidden" />
+                {{ opt.label }}
+              </label>
+            }
+          </div>
+          @if (isFieldInvalid('valor_principal')) {
+            <p class="error-msg mt-2">Select an option.</p>
+          }
+        </div>
+
+        <div>
+          <p class="text-gray-200 font-medium mb-1">
+            3. Your friends would describe you as...
+            <span class="text-hp-muted text-xs">(choose up to 4)</span>
+          </p>
+          <div class="flex flex-wrap gap-2 mt-3">
+            @for (rasgo of options.rasgos; track rasgo) {
+              <button type="button" (click)="toggleRasgo(rasgo)" [class]="chipClass(isRasgoSelected(rasgo))">
+                {{ rasgo }}
+              </button>
+            }
+          </div>
+          @if (isFieldInvalid('rasgos')) {
+            <p class="error-msg mt-2">Select at least one trait.</p>
+          }
+        </div>
+
+      </div>
+    }
+
+    <!-- ══ STEP 2 ══ -->
+    @if (currentStep() === 2) {
+      <div class="space-y-6 animate-slide-up">
+
+        <div>
+          <p class="text-gray-200 font-medium mb-3">4. What subject would you most enjoy at Hogwarts?</p>
+          <div class="space-y-2">
+            @for (opt of options.materia_favorita; track opt.value) {
+              <label [class]="radioOptionClass(form.value.materia_favorita, opt.value)">
+                <input type="radio" formControlName="materia_favorita" [value]="opt.value" class="hidden" />
+                <div [class]="radioDotClass(form.value.materia_favorita, opt.value)"></div>
+                <span class="text-sm text-gray-300">{{ opt.label }}</span>
+              </label>
+            }
+          </div>
+          @if (isFieldInvalid('materia_favorita')) {
+            <p class="error-msg mt-2">Select an option.</p>
+          }
+        </div>
+
+        <div>
+          <p class="text-gray-200 font-medium mb-3">5. What would you do in your first year at Hogwarts?</p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            @for (opt of options.primer_anio; track opt.value) {
+              <label [class]="radioOptionClass(form.value.primer_anio, opt.value)">
+                <input type="radio" formControlName="primer_anio" [value]="opt.value" class="hidden" />
+                <div [class]="radioDotClass(form.value.primer_anio, opt.value)"></div>
+                <span class="text-sm text-gray-300">{{ opt.label }}</span>
+              </label>
+            }
+          </div>
+          @if (isFieldInvalid('primer_anio')) {
+            <p class="error-msg mt-2">Select an option.</p>
+          }
+        </div>
+
+        <div>
+          <p class="text-gray-200 font-medium mb-3">6. What would your ideal Patronus be?</p>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+            @for (opt of options.patronus; track opt.value) {
+              <label [class]="pillOptionClass(form.value.patronus, opt.value)">
+                <input type="radio" formControlName="patronus" [value]="opt.value" class="hidden" />
+                {{ opt.label }}
+              </label>
+            }
+          </div>
+          @if (isFieldInvalid('patronus')) {
+            <p class="error-msg mt-2">Select an option.</p>
+          }
+        </div>
+
+      </div>
+    }
+
+    <!-- ══ STEP 3 ══ -->
+    @if (currentStep() === 3) {
+      <div class="space-y-6 animate-slide-up">
+
+        <div>
+          <p class="text-gray-200 font-medium mb-3">7. When facing injustice, you...</p>
+          <div class="space-y-2">
+            @for (opt of options.ante_injusticia; track opt.value) {
+              <label [class]="radioOptionClass(form.value.ante_injusticia, opt.value)">
+                <input type="radio" formControlName="ante_injusticia" [value]="opt.value" class="hidden" />
+                <div [class]="radioDotClass(form.value.ante_injusticia, opt.value)"></div>
+                <span class="text-sm text-gray-300">{{ opt.label }}</span>
+              </label>
+            }
+          </div>
+          @if (isFieldInvalid('ante_injusticia')) {
+            <p class="error-msg mt-2">Select an option.</p>
+          }
+        </div>
+
+        <div>
+          <p class="text-gray-200 font-medium mb-3">8. What is your biggest fear?</p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            @for (opt of options.mayor_temor; track opt.value) {
+              <label [class]="radioOptionClass(form.value.mayor_temor, opt.value)">
+                <input type="radio" formControlName="mayor_temor" [value]="opt.value" class="hidden" />
+                <div [class]="radioDotClass(form.value.mayor_temor, opt.value)"></div>
+                <span class="text-sm text-gray-300">{{ opt.label }}</span>
+              </label>
+            }
+          </div>
+          @if (isFieldInvalid('mayor_temor')) {
+            <p class="error-msg mt-2">Select an option.</p>
+          }
+        </div>
+
+        <div>
+          <p class="text-gray-200 font-medium mb-3">9. In one sentence, what is your life motto?</p>
+          <div class="relative">
+            <textarea
+              formControlName="lema_vida"
+              placeholder="E.g.: «There will always be light while someone lights it»"
+              rows="3"
+              maxlength="120"
+              class="hp-input resize-none"
+            ></textarea>
+            <span class="absolute bottom-2 right-3 text-xs text-hp-muted">{{ lemaLength }}/120</span>
+          </div>
+          @if (isFieldInvalid('lema_vida')) {
+            <p class="error-msg mt-1">Write your motto (max 120 characters).</p>
+          }
+        </div>
+
+      </div>
+    }
+
+    <!-- Navigation -->
+    <div class="flex gap-3 mt-8">
+      @if (currentStep() > 1) {
+        <button type="button" (click)="back()"
+          class="flex-1 py-3 rounded-lg border border-hp-border text-gray-400 hover:text-gray-200 transition-all duration-200 text-sm font-medium">
+          ← Previous
+        </button>
+      }
+      @if (currentStep() < 3) {
+        <button type="button" (click)="next()" class="hp-btn-primary" [class.flex-1]="currentStep() > 1">
+          Next →
+        </button>
+      } @else {
+        <button type="submit" class="hp-btn-primary flex-1 flex items-center justify-center gap-2">
+          <lucide-icon name="sparkles" class="w-4 h-4"></lucide-icon>
+          <span>Discover my character</span>
+        </button>
+      }
+    </div>
+
+  </form>
+</div>

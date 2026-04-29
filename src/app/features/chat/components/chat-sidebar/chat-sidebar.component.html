@@ -1,0 +1,101 @@
+<aside class="w-72 h-full bg-hp-surface border-r border-hp-border flex flex-col">
+
+  <!-- Header -->
+  <div class="p-4 border-b border-hp-border">
+    <div class="flex items-center gap-2 mb-4">
+      <lucide-icon name="zap" class="w-6 h-6 text-hp-gold"></lucide-icon>
+      <span class="font-heading text-hp-gold tracking-wider text-lg">Horrocruxes</span>
+    </div>
+
+    <!-- New chat button -->
+    <div class="relative">
+      <button
+        (click)="showCharacterPicker.set(!showCharacterPicker())"
+        class="w-full flex items-center justify-center gap-2 bg-hp-gold/10 hover:bg-hp-gold/20 border border-hp-gold/30 hover:border-hp-gold/50 text-hp-gold rounded-lg py-2.5 px-4 text-sm font-medium transition-all duration-200"
+      >
+        <span class="text-lg">+</span>
+        New conversation
+      </button>
+
+      <!-- Character picker dropdown -->
+      @if (showCharacterPicker()) {
+        <div class="absolute top-full left-0 right-0 mt-1 bg-hp-raised border border-hp-border rounded-lg shadow-xl z-10 overflow-hidden animate-fade-in">
+          @for (key of characterKeys; track key) {
+            <button
+              (click)="newChat(key)"
+              class="w-full flex items-center gap-3 px-4 py-3 hover:bg-hp-surface text-left transition-colors duration-150"
+            >
+              <lucide-icon [name]="characters[key].icon" class="w-5 h-5"></lucide-icon>
+              <div>
+                <p class="text-sm text-gray-200 font-medium">{{ characters[key].label }}</p>
+                <p class="text-xs text-hp-muted">{{ characters[key].description }}</p>
+              </div>
+            </button>
+          }
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Chat list -->
+  <nav class="flex-1 overflow-y-auto py-2">
+    @if (chats().length === 0) {
+      <div class="flex flex-col items-center justify-center h-full gap-3 px-6 text-center">
+        <lucide-icon name="castle" class="w-16 h-16 text-hp-muted/30"></lucide-icon>
+        <p class="text-hp-muted text-sm">No conversations yet.<br>Start a new one!</p>
+      </div>
+    }
+
+    @for (chat of chats(); track chat.id) {
+      <div
+        (click)="selectChat(chat.id)"
+        [class.bg-hp-raised]="activeChat()?.id === chat.id"
+        [class.border-l-2]="activeChat()?.id === chat.id"
+        [class.border-l-hp-gold]="activeChat()?.id === chat.id"
+        [class.opacity-0]="deletingId() === chat.id"
+        class="group flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-hp-raised transition-all duration-200 mx-1 rounded-lg"
+      >
+        <!-- Character avatar -->
+        <div class="w-9 h-9 rounded-full bg-hp-border flex items-center justify-center flex-shrink-0">
+          <lucide-icon [name]="getCharacter(chat.character).icon" class="w-5 h-5 text-hp-dark"></lucide-icon>
+        </div>
+
+        <!-- Chat info -->
+        <div class="flex-1 min-w-0">
+          <p class="text-sm text-gray-200 truncate font-medium">{{ chat.title }}</p>
+          <p class="text-xs text-hp-muted truncate">
+            {{ getCharacter(chat.character).label }} · {{ formatDate(chat.lastMessageAt) }}
+          </p>
+        </div>
+
+        <!-- Delete button -->
+        <button
+          (click)="deleteChat($event, chat.id)"
+          class="opacity-0 group-hover:opacity-100 text-hp-muted hover:text-red-400 transition-all duration-200 p-1 rounded flex-shrink-0"
+          title="Delete chat"
+        >
+          <lucide-icon name="trash-2" class="w-4 h-4"></lucide-icon>
+        </button>
+      </div>
+    }
+  </nav>
+
+  <!-- Footer -->
+  <div class="p-4 border-t border-hp-border space-y-1">
+    <a
+      routerLink="/quiz"
+      class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-hp-raised text-gray-400 hover:text-hp-gold transition-all duration-200 text-sm"
+    >
+      <lucide-icon name="wand-sparkles" class="w-5 h-5"></lucide-icon>
+      <span>Which character are you?</span>
+    </a>
+    <button
+      (click)="signOut()"
+      class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-red-500/10 text-gray-400 hover:text-red-400 transition-all duration-200 text-sm"
+    >
+      <lucide-icon name="log-out" class="w-5 h-5"></lucide-icon>
+      <span>Sign out</span>
+    </button>
+  </div>
+
+</aside>

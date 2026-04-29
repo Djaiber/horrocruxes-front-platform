@@ -1,0 +1,73 @@
+<div class="animate-slide-up text-center">
+
+  <!-- Header -->
+  <div class="mb-8">
+    <p class="text-hp-muted text-sm mb-2 font-heading tracking-widest uppercase">The Sorting Hat has spoken</p>
+    <div class="w-16 h-16 mx-auto mb-4 text-hp-gold animate-bounce" style="animation-duration: 2s;">
+      <lucide-icon name="zap" class="w-16 h-16"></lucide-icon>
+    </div>
+    <h2 class="font-heading text-hp-gold text-3xl tracking-wide mb-1">{{ result().personaje }}</h2>
+  </div>
+
+  <!-- Main card -->
+  <div class="hp-card p-6 mb-6 text-left">
+
+    <!-- House badge -->
+    <div
+      class="inline-flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-medium mb-5"
+      [class]="getCasaStyle(result().casa).bg + ' ' + getCasaStyle(result().casa).text + ' ' + getCasaStyle(result().casa).border"
+    >
+      <lucide-icon [name]="getCasaStyle(result().casa).icon" class="w-4 h-4"></lucide-icon>
+      {{ result().casa }} House
+    </div>
+
+    <!-- Compatibility bar -->
+    <div class="mb-5">
+      <div class="flex justify-between items-center mb-2">
+        <span class="text-xs text-hp-muted">Match</span>
+        <span class="text-sm font-bold text-hp-gold font-heading">{{ result().match_percentage }}%</span>
+      </div>
+      <div class="h-2 bg-hp-raised rounded-full overflow-hidden">
+        <div
+          class="h-full bg-gradient-to-r from-hp-gold/60 to-hp-gold rounded-full transition-all duration-1000"
+          [style.width.%]="result().match_percentage"
+        ></div>
+      </div>
+    </div>
+
+    <!-- Description -->
+    <p class="text-gray-300 text-sm leading-relaxed mb-5">{{ result().descripcion }}</p>
+
+    <!-- Traits -->
+    <div class="flex flex-wrap gap-2 mb-5">
+      @for (trait of result().traits; track trait) {
+        <span class="hp-badge">{{ trait }}</span>
+      }
+    </div>
+
+    <!-- Quote -->
+    <div class="border-l-2 border-hp-gold/40 pl-4 py-1">
+      <p class="text-gray-400 text-sm italic leading-relaxed">{{ result().quote }}</p>
+    </div>
+
+  </div>
+
+  <!-- Actions -->
+  <div class="flex flex-col sm:flex-row gap-3">
+    <button
+      (click)="retake.emit()"
+      class="flex-1 py-3 rounded-lg border border-hp-border text-gray-400 hover:text-gray-200 hover:border-gray-500 transition-all duration-200 text-sm font-medium flex items-center justify-center gap-2"
+    >
+      <lucide-icon name="rotate-ccw" class="w-4 h-4"></lucide-icon>
+      <span>Retake test</span>
+    </button>
+    <a
+      routerLink="/chat"
+      class="flex-1 hp-btn-primary text-center py-3 rounded-lg no-underline flex items-center justify-center gap-2"
+    >
+      <lucide-icon name="message-circle" class="w-4 h-4"></lucide-icon>
+      <span>Chat with my character</span>
+    </a>
+  </div>
+
+</div>

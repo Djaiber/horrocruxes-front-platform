@@ -1,0 +1,85 @@
+<div class="flex flex-col h-full bg-hp-dark">
+
+  @if (activeChat(); as chat) {
+
+    <!-- Header del chat -->
+    <div class="flex items-center gap-3 px-6 py-4 border-b border-hp-border bg-hp-surface/50 backdrop-blur-sm flex-shrink-0">
+      <div class="w-10 h-10 rounded-full bg-hp-border/60 flex items-center justify-center">
+        <lucide-icon [name]="characters[chat.character].icon" class="w-5 h-5 text-hp-gold"></lucide-icon>
+      </div>
+      <div>
+        <h2 class="text-sm font-semibold text-gray-100">{{ characters[chat.character].label }}</h2>
+        <p class="text-xs text-hp-muted">{{ characters[chat.character].description }}</p>
+      </div>
+      <div class="ml-auto flex items-center gap-1">
+        <lucide-icon name="sparkles" class="w-4 h-4"></lucide-icon>
+        <span class="hp-badge">Magic mode</span>
+      </div>
+    </div>
+
+    <!-- Mensajes -->
+    <div #messageList class="flex-1 overflow-y-auto px-6 py-4 space-y-4">
+
+      @if (messages().length === 0) {
+        <div class="flex flex-col items-center justify-center h-full gap-4 text-center animate-fade-in">
+          <lucide-icon [name]="characters[chat.character].icon" class="w-20 h-20 text-hp-gold/40"></lucide-icon>
+          <div>
+            <h3 class="font-heading text-hp-gold text-lg mb-1">{{ characters[chat.character].label }}</h3>
+            <p class="text-hp-muted text-sm max-w-xs">
+              {{ characters[chat.character].description }}.<br>
+              Write me something to start!
+            </p>
+          </div>
+        </div>
+      }
+
+      @for (msg of messages(); track msg.id) {
+        <app-message-bubble [message]="msg" [character]="chat.character" />
+      }
+
+      <!-- Indicador de escritura -->
+      @if (sending()) {
+        <div class="animate-fade-in space-y-2">
+          <div class="flex items-end gap-2">
+            <div class="w-8 h-8 rounded-full bg-hp-border/60 flex items-center justify-center flex-shrink-0">
+              <lucide-icon [name]="characters[chat.character].icon" class="w-4 h-4 text-hp-gold"></lucide-icon>
+            </div>
+            <div class="bg-hp-surface border border-hp-border rounded-2xl rounded-bl-sm px-4 py-3">
+              <div class="flex gap-1 items-center h-4">
+                <span class="w-1.5 h-1.5 bg-hp-gold/60 rounded-full animate-bounce" style="animation-delay:0ms"></span>
+                <span class="w-1.5 h-1.5 bg-hp-gold/60 rounded-full animate-bounce" style="animation-delay:150ms"></span>
+                <span class="w-1.5 h-1.5 bg-hp-gold/60 rounded-full animate-bounce" style="animation-delay:300ms"></span>
+              </div>
+            </div>
+          </div>
+          @if (waitingPhrase()) {
+            <p class="text-xs text-hp-muted/70 pl-10 font-heading tracking-wide italic transition-all duration-500 animate-fade-in">
+              {{ waitingPhrase() }}
+            </p>
+          }
+        </div>
+      }
+
+    </div>
+
+    <!-- Input -->
+    <div class="flex-shrink-0 border-t border-hp-border p-4">
+      <app-chat-input [disabled]="sending()" (sendMessage)="onSend($event)" />
+    </div>
+
+  } @else {
+
+    <!-- Empty state -->
+    <div class="flex flex-col items-center justify-center h-full gap-6 text-center px-8 animate-fade-in">
+      <lucide-icon name="castle" class="w-28 h-28 text-hp-muted/20"></lucide-icon>
+      <div>
+        <h2 class="font-heading text-hp-gold text-xl mb-2">Welcome to Horrocruxes</h2>
+        <p class="text-hp-muted text-sm max-w-sm">
+          Select a conversation from the left panel or create a new one to chat with your favorite Harry Potter characters.
+        </p>
+      </div>
+    </div>
+
+  }
+
+</div>

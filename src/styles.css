@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body {
+    @apply bg-hp-dark text-gray-100 font-body antialiased;
+    height: 100%;
+  }
+
+  h1, h2, h3 {
+    @apply font-heading;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-hp-surface;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-hp-border rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-hp-gold/40;
+  }
+}
+
+@layer components {
+  .hp-input {
+    @apply w-full bg-hp-raised border border-hp-border rounded-lg px-4 py-3
+           text-gray-100 placeholder-hp-muted text-sm
+           focus:outline-none focus:border-hp-gold/60 focus:ring-1 focus:ring-hp-gold/30
+           transition-colors duration-200;
+  }
+
+  .hp-btn-primary {
+    @apply w-full bg-hp-gold hover:bg-hp-gold-light text-hp-dark font-semibold
+           py-3 px-6 rounded-lg transition-all duration-200
+           disabled:opacity-50 disabled:cursor-not-allowed
+           active:scale-[0.98] font-heading tracking-wide text-sm;
+  }
+
+  .hp-btn-ghost {
+    @apply text-hp-gold hover:text-hp-gold-light text-sm transition-colors duration-200;
+  }
+
+  .hp-card {
+    @apply bg-hp-surface border border-hp-border/50 rounded-xl;
+  }
+
+  .hp-badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium
+           bg-hp-gold/10 text-hp-gold border border-hp-gold/20;
+  }
+
+  .error-msg {
+    @apply text-red-400 text-xs mt-1;
+  }
+}
