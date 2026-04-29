@@ -7,7 +7,9 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+    permissions:
+      id-token: write   # Necesario para OIDC
+      contents: read    # Necesario para actions/checkout
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
