@@ -2,7 +2,7 @@ name: Deploy Angular to AWS
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
 
 jobs:
   deploy:
