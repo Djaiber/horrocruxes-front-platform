@@ -34,15 +34,15 @@ jobs:
       # 🔥 Upload static assets with long cache
       - name: Upload static assets
         run: |
-          aws s3 sync dist/horrocruxes/ s3://horrocruxes-harrypotter-rag.me \
+          aws s3 sync dist/horrocruxes/browser/ s3://horrocruxes-harrypotter-rag.me \
             --delete \
             --exclude "index.html" \
             --cache-control "max-age=31536000,public"
-
+      
       # 🔥 Upload index.html with no cache
       - name: Upload index.html
         run: |
-          aws s3 cp dist/horrocruxes/index.html \
+          aws s3 cp dist/horrocruxes/browser/index.html \
             s3://horrocruxes-harrypotter-rag.me/index.html \
             --cache-control "no-cache"
 
